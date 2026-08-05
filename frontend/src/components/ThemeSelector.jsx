@@ -7,7 +7,7 @@
 import { useState, useEffect } from 'react'
 
 export default function ThemeSelector() {
-  const [theme, setTheme] = useState(() => localStorage.getItem('app-theme') || 'system')
+  const [theme, setTheme] = useState(() => localStorage.getItem('app-theme') || 'dark')
   const [dropdownOpen, setDropdownOpen] = useState(false)
 
   const applyTheme = (selectedTheme) => {

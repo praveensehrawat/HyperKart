@@ -12,6 +12,14 @@
       if (typeof global === 'undefined') {
         window.global = window;
       }
+      (function() {
+        const saved = localStorage.getItem('app-theme');
+        if (saved === 'light') {
+          document.documentElement.classList.add('theme-light');
+        } else {
+          document.documentElement.classList.add('theme-dark');
+        }
+      })();
     </script>
   </head>
   <body>
