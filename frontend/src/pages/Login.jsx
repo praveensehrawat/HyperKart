@@ -10,6 +10,7 @@ import { useNavigate, Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import api from '../api/axios'
 import { setAuth } from '../store/authSlice'
+import { formatError } from '../utils/formatError'
 
 export default function Login() {
   const { user } = useSelector((s) => s.auth)
@@ -89,7 +90,7 @@ export default function Login() {
       const target = getDashboardPath(data.user?.role)
       navigate(target, { replace: true })
     } catch (err) {
-      setError(err.response?.data?.error || 'Login failed. Please check credentials.')
+      setError(formatError(err, 'Login failed. Please check credentials.'))
     } finally {
       setLoading(false)
     }
@@ -108,7 +109,7 @@ export default function Login() {
       setForgotMsg(data.message || 'Email verified! Please enter your new password below.')
       setForgotStep(2)
     } catch (err) {
-      setForgotErr(err.response?.data?.error || 'No registered account found with this email.')
+      setForgotErr(formatError(err, 'No registered account found with this email.'))
     } finally {
       setForgotLoading(false)
     }
@@ -135,7 +136,7 @@ export default function Login() {
         setForgotMsg('')
       }, 1800)
     } catch (err) {
-      setForgotErr(err.response?.data?.error || 'Failed to reset password.')
+      setForgotErr(formatError(err, 'Failed to reset password.'))
     } finally {
       setForgotLoading(false)
     }
@@ -150,7 +151,7 @@ export default function Login() {
         <h2 className="text-3xl font-extrabold text-gradient">Login</h2>
       </div>
 
-      {error && <p className="text-red-300 mb-4 text-xs bg-red-500/10 border border-red-500/20 p-3 rounded-xl font-semibold animate-pulse">{error}</p>}
+      {error && <p className="text-red-300 mb-4 text-xs bg-red-500/10 border border-red-500/20 p-3 rounded-xl font-semibold animate-pulse">{formatError(error)}</p>}
 
       <form onSubmit={handleSubmit} autoComplete="on" className="space-y-4 font-Outfit">
         <div>

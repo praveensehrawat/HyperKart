@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import api from '../api/axios'
 import { clearCart } from '../store/cartSlice'
 import { useToast } from '../components/Toast'
+import { formatError } from '../utils/formatError'
 
 export default function Checkout() {
   const cartItems = useSelector((s) => s.cart.items)
@@ -307,8 +308,7 @@ export default function Checkout() {
         <h2 className="text-3xl md:text-4xl font-extrabold text-gradient mb-2">Complete Checkout</h2>
         <p className="text-gray-400 text-sm">Review purchase items, finalize physical address, and authorize payment.</p>
       </div>
-
-      {error && <div className="bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl p-4 text-sm font-semibold animate-pulse">{error}</div>}
+      {error && <div className="bg-red-500/10 border border-red-500/20 text-red-300 rounded-xl p-4 text-sm font-semibold animate-pulse">{formatError(error)}</div>}
       {success && <div className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 rounded-xl p-4 text-sm font-semibold">{success}</div>}
 
       <div className="grid gap-6 lg:grid-cols-2">

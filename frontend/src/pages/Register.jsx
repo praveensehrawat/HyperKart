@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import api from '../api/axios'
 import { setAuth } from '../store/authSlice'
 import SocialAuthButtons from '../components/SocialAuthButtons'
+import { formatError } from '../utils/formatError'
 
 export default function Register() {
   const { user } = useSelector((s) => s.auth)
@@ -90,7 +91,7 @@ export default function Register() {
       const target = getDashboardPath(data.user?.role)
       navigate(target, { replace: true })
     } catch (err) {
-      setError(err.response?.data?.error || 'Registration failed. Try using a different email address.')
+      setError(formatError(err, 'Registration failed. Try using a different email address.'))
       generateCaptcha()
     } finally {
       setLoading(false)
@@ -108,7 +109,7 @@ export default function Register() {
 
       {error && (
         <p className="text-red-300 mb-4 text-xs bg-red-500/10 border border-red-500/20 p-3 rounded-xl font-semibold animate-pulse">
-          {error}
+          {formatError(error)}
         </p>
       )}
 

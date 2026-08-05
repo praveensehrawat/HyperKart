@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import api from '../api/axios'
 import { setAuth } from '../store/authSlice'
+import { formatError } from '../utils/formatError'
 
 /**
  * Social Authentication Component (Google & Facebook)
@@ -55,7 +56,7 @@ export default function SocialAuthButtons({ selectedRole = 'BUYER', mode = 'logi
       const target = getDashboardPath(data.user?.role || data.role)
       navigate(target, { replace: true })
     } catch (err) {
-      setError(err.response?.data?.error || `${provider} authentication failed. Please try again.`)
+      setError(formatError(err, `${provider} authentication failed. Please try again.`))
     } finally {
       setLoadingProvider(null)
       setShowDemoModal(null)
@@ -130,7 +131,7 @@ export default function SocialAuthButtons({ selectedRole = 'BUYER', mode = 'logi
     <div className="w-full space-y-3 font-Outfit my-4">
       {error && (
         <div className="text-red-300 text-xs bg-red-500/10 border border-red-500/20 p-2.5 rounded-xl font-semibold animate-pulse">
-          {error}
+          {formatError(error)}
         </div>
       )}
 
