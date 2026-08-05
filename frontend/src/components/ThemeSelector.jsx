@@ -7,20 +7,17 @@
 import { useState, useEffect } from 'react'
 
 export default function ThemeSelector() {
-  const [theme, setTheme] = useState(() => localStorage.getItem('app-theme') || 'dark')
+  const [theme, setTheme] = useState(() => {
+    const saved = localStorage.getItem('app-theme')
+    return (saved === 'light') ? 'light' : 'dark'
+  })
   const [dropdownOpen, setDropdownOpen] = useState(false)
 
   const applyTheme = (selectedTheme) => {
     const root = document.documentElement
     root.classList.remove('theme-light', 'theme-dark')
 
-    let effectiveTheme = selectedTheme
-    if (selectedTheme === 'system') {
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-      effectiveTheme = prefersDark ? 'dark' : 'light'
-    }
-
-    if (effectiveTheme === 'light') {
+    if (selectedTheme === 'light') {
       root.classList.add('theme-light')
     } else {
       root.classList.add('theme-dark')
@@ -30,19 +27,11 @@ export default function ThemeSelector() {
   useEffect(() => {
     applyTheme(theme)
     localStorage.setItem('app-theme', theme)
-
-    if (theme === 'system') {
-      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
-      const handleChange = () => applyTheme('system')
-      mediaQuery.addEventListener('change', handleChange)
-      return () => mediaQuery.removeEventListener('change', handleChange)
-    }
   }, [theme])
 
   const themeOptions = [
-    { id: 'system', label: 'System', icon: '💻' },
-    { id: 'dark', label: 'Dark', icon: '🌙' },
-    { id: 'light', label: 'Light', icon: '☀️' },
+    { id: 'dark', label: 'Dark Mode', icon: '🌙' },
+    { id: 'light', label: 'Light Mode', icon: '☀️' },
   ]
 
   const activeOption = themeOptions.find((o) => o.id === theme) || themeOptions[0]

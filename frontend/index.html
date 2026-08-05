@@ -18,6 +18,9 @@
           document.documentElement.classList.add('theme-light');
         } else {
           document.documentElement.classList.add('theme-dark');
+          if (!saved || saved === 'system') {
+            localStorage.setItem('app-theme', 'dark');
+          }
         }
       })();
     </script>
