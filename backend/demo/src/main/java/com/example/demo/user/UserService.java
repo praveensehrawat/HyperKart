@@ -37,7 +37,8 @@ public class UserService {
      * Generates a signed JWT session token and records client IP address.
      */
     public AuthResponse register(RegisterRequest request, String ipAddress) {
-        if (userRepository.existsByEmail(request.getEmail())) {
+        String cleanEmail = request.getEmail() != null ? request.getEmail().trim().toLowerCase() : "";
+        if (userRepository.existsByEmailIgnoreCase(cleanEmail)) {
             throw new IllegalArgumentException("Email already registered");
         }
 
@@ -52,7 +53,7 @@ public class UserService {
         String now = java.time.format.DateTimeFormatter.ISO_INSTANT.format(java.time.Instant.now());
         User user = User.builder()
                 .name(request.getName())
-                .email(request.getEmail())
+                .email(cleanEmail)
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(role)
                 .lastLoginIp(ipAddress != null ? ipAddress : "127.0.0.1")
@@ -77,12 +78,21 @@ public class UserService {
      * Generates signed JWT session tokens and updates client IP address.
      */
     public AuthResponse login(LoginRequest request, String ipAddress) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
-        );
+        String cleanEmail = request.getEmail() != null ? request.getEmail().trim() : "";
+        User user = userRepository.findByEmailIgnoreCase(cleanEmail)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid email or password"));
 
-        User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid credentials"));
+        if (user.isForceLoggedOut()) {
+            throw new IllegalArgumentException("Your session has been terminated by System Administrator.");
+        }
+
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(user.getEmail(), request.getPassword())
+            );
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Invalid email or password");
+        }
 
         String now = java.time.format.DateTimeFormatter.ISO_INSTANT.format(java.time.Instant.now());
         user.setLastLoginIp(ipAddress != null ? ipAddress : "127.0.0.1");
@@ -171,7 +181,7 @@ public class UserService {
      * Looks up user profile by email index.
      */
     public User findByEmail(String email) {
-        User user = userRepository.findByEmail(email)
+        User user = userRepository.findByEmailIgnoreCase(email != null ? email.trim() : "")
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
         if (user.isForceLoggedOut()) {
             throw new IllegalArgumentException("Your session has been terminated by System Administrator. Please login again.");
@@ -212,7 +222,7 @@ public class UserService {
      * Resets password for any user account (BUYER, SELLER, DRIVER, ADMIN).
      */
     public void resetPassword(String email, String newPassword) {
-        User user = userRepository.findByEmail(email)
+        User user = userRepository.findByEmailIgnoreCase(email != null ? email.trim() : "")
                 .orElseThrow(() -> new IllegalArgumentException("No account registered with email: " + email));
         if (newPassword == null || newPassword.trim().length() < 6) {
             throw new IllegalArgumentException("New password must be at least 6 characters long.");

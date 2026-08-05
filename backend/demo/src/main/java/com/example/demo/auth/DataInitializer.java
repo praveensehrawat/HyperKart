@@ -29,85 +29,90 @@ public class DataInitializer implements CommandLineRunner {
     public void run(String... args) {
         log.info("Checking & seeding default authentication accounts...");
 
-        String defaultPass = passwordEncoder.encode("password123");
+        String defaultPass = passwordEncoder.encode("Password123!");
 
         // 1. Seed Admin Account
-        if (userRepository.findByEmail("admin@HYPERKART.com").isEmpty()) {
-            User admin = User.builder()
+        String adminEmail = "admin@hyperkart.com";
+        User admin = userRepository.findByEmailIgnoreCase(adminEmail)
+                .orElseGet(() -> userRepository.findByEmailIgnoreCase("admin@HYPERKART.com").orElse(null));
+        if (admin == null) {
+            admin = User.builder()
                     .name("System Administrator")
-                    .email("admin@HYPERKART.com")
+                    .email(adminEmail)
                     .password(defaultPass)
                     .role("ADMIN")
                     .provider("LOCAL")
                     .forceLoggedOut(false)
                     .build();
-            userRepository.save(admin);
-            log.info("Seeded Admin Account: admin@HYPERKART.com / password123");
         } else {
-            // Update password to ensure password123 works
-            User admin = userRepository.findByEmail("admin@HYPERKART.com").get();
+            admin.setEmail(adminEmail);
             admin.setPassword(defaultPass);
-            userRepository.save(admin);
+            admin.setRole("ADMIN");
         }
+        userRepository.save(admin);
+        log.info("Seeded Admin Account: admin@hyperkart.com / Password123!");
 
         // 2. Seed Seller Account
-        User sellerUser;
-        if (userRepository.findByEmail("john.doe@gmail.com").isEmpty()) {
+        String sellerEmail = "john.doe@gmail.com";
+        User sellerUser = userRepository.findByEmailIgnoreCase(sellerEmail).orElse(null);
+        if (sellerUser == null) {
             sellerUser = User.builder()
                     .name("John Doe")
-                    .email("john.doe@gmail.com")
+                    .email(sellerEmail)
                     .password(defaultPass)
                     .role("SELLER")
                     .provider("LOCAL")
                     .forceLoggedOut(false)
                     .build();
-            sellerUser = userRepository.save(sellerUser);
-            log.info("Seeded Seller Account: john.doe@gmail.com / password123");
         } else {
-            sellerUser = userRepository.findByEmail("john.doe@gmail.com").get();
             sellerUser.setPassword(defaultPass);
             sellerUser.setRole("SELLER");
-            userRepository.save(sellerUser);
         }
+        userRepository.save(sellerUser);
+        log.info("Seeded Seller Account: john.doe@gmail.com / Password123!");
 
         // 3. Seed Driver Account
-        if (userRepository.findByEmail("driver@HYPERKART.com").isEmpty()) {
-            User driver = User.builder()
+        String driverEmail = "driver@hyperkart.com";
+        User driver = userRepository.findByEmailIgnoreCase(driverEmail)
+                .orElseGet(() -> userRepository.findByEmailIgnoreCase("driver@HYPERKART.com").orElse(null));
+        if (driver == null) {
+            driver = User.builder()
                     .name("Rajesh Express Driver")
-                    .email("driver@HYPERKART.com")
+                    .email(driverEmail)
                     .password(defaultPass)
                     .role("DRIVER")
                     .provider("LOCAL")
                     .forceLoggedOut(false)
                     .build();
-            userRepository.save(driver);
-            log.info("Seeded Driver Account: driver@HYPERKART.com / password123");
         } else {
-            User driver = userRepository.findByEmail("driver@HYPERKART.com").get();
+            driver.setEmail(driverEmail);
             driver.setPassword(defaultPass);
             driver.setRole("DRIVER");
-            userRepository.save(driver);
         }
+        userRepository.save(driver);
+        log.info("Seeded Driver Account: driver@hyperkart.com / Password123!");
 
         // 4. Seed Buyer Account
-        if (userRepository.findByEmail("buyer@HYPERKART.com").isEmpty()) {
-            User buyer = User.builder()
+        String buyerEmail = "buyer@hyperkart.com";
+        User buyer = userRepository.findByEmailIgnoreCase(buyerEmail)
+                .orElseGet(() -> userRepository.findByEmailIgnoreCase("buyer@HYPERKART.com").orElse(null));
+        if (buyer == null) {
+            buyer = User.builder()
                     .name("Anita Kumar")
-                    .email("buyer@HYPERKART.com")
+                    .email(buyerEmail)
                     .password(defaultPass)
                     .role("BUYER")
                     .provider("LOCAL")
                     .forceLoggedOut(false)
                     .build();
-            userRepository.save(buyer);
-            log.info("Seeded Buyer Account: buyer@HYPERKART.com / password123");
         } else {
-            User buyer = userRepository.findByEmail("buyer@HYPERKART.com").get();
+            buyer.setEmail(buyerEmail);
             buyer.setPassword(defaultPass);
             buyer.setRole("BUYER");
-            userRepository.save(buyer);
         }
+        userRepository.save(buyer);
+        log.info("Seeded Buyer Account: buyer@hyperkart.com / Password123!");
 
-        log.info("Demo accounts initialized successfully! All passwords set to 'password123'");
+        log.info("Demo accounts initialized successfully! All default passwords set to 'Password123!'");
     }
 }
