@@ -1,0 +1,14 @@
+# Core async web framework
+fastapi
+
+# Production server implementation
+uvicorn[standard]
+
+# Data validation and settings management using python type annotations
+pydantic
+
+# Load environment variables from .env file
+python-dotenv
+
+# OpenAI API Python client library
+openai

@@ -1,0 +1,516 @@
+/*
+ * Global TailwindCSS v4 Setup & Custom Theme Design System
+ * ========================================================
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+@import "tailwindcss";
+
+@layer base {
+  body {
+    margin: 0;
+    font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+    background-color: #0b0f19;
+    color: #f3f4f6;
+    overflow-x: hidden;
+  }
+
+  /* Custom subtle scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0f172a;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #4f46e5;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #6366f1;
+  }
+}
+
+/* 🗺️ Leaflet Map Styling & Dark Mode Tile Controls */
+.leaflet-container {
+  width: 100% !important;
+  height: 420px !important;
+  min-height: 350px !important;
+  background: #e2e8f0 !important;
+  border-radius: 1rem !important;
+  z-index: 1 !important;
+}
+
+.leaflet-tile {
+  filter: none !important;
+}
+
+.leaflet-popup-content-wrapper {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border: 1px solid rgba(0, 0, 0, 0.15) !important;
+  border-radius: 12px !important;
+}
+
+.leaflet-popup-tip {
+  background: #ffffff !important;
+}
+
+/* 
+ * Premium Animation Keyframes 
+ */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateY(-8px) scale(1.01);
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+  }
+}
+
+@keyframes glow-spin {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/*
+ * Custom Design System Classes
+ */
+.glass-panel {
+  background: rgba(17, 24, 39, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-card {
+  background: rgba(30, 41, 59, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card:hover {
+  transform: translateY(-6px);
+  background: rgba(30, 41, 59, 0.65);
+  border-color: rgba(99, 102, 241, 0.4);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5), 0 0 20px 0 rgba(99, 102, 241, 0.15);
+}
+
+.neon-glow-primary {
+  box-shadow: 0 0 20px 0 rgba(139, 92, 246, 0.25);
+}
+
+.neon-glow-accent {
+  box-shadow: 0 0 20px 0 rgba(16, 185, 129, 0.25);
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, #a78bfa 0%, #818cf8 50%, #f472b6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.bg-gradient-mesh {
+  background-color: #0b0f19;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(236, 72, 153, 0.1) 0px, transparent 50%),
+    radial-gradient(at 50% 0%, rgba(16, 185, 129, 0.08) 0px, transparent 50%);
+}
+
+.animate-float-slow {
+  animation: float 6s ease-in-out infinite;
+}
+
+.pulse-indicator-active {
+  animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.btn-neon {
+  position: relative;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 15px -3px rgba(99, 102, 241, 0.4);
+  transition: all 0.3s ease;
+}
+
+.btn-neon:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -3px rgba(99, 102, 241, 0.6), 0 0 15px 2px rgba(139, 92, 246, 0.3);
+}
+
+/* Card Flip Styles */
+.perspective-1000 {
+  perspective: 1000px;
+}
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+.backface-hidden {
+  backface-visibility: hidden;
+}
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+/* Toast Animations */
+@keyframes toast-in {
+  from {
+    transform: translateX(120%) scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes progress-shrink {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}
+
+.animate-toast-in {
+  animation: toast-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-toast-progress {
+  animation: progress-shrink linear forwards;
+}
+
+/*
+ * Light Theme System Overrides (.theme-light)
+ */
+/*
+ * Light Theme System Overrides (.theme-light)
+ * ===========================================
+ */
+html.theme-light body,
+body.theme-light {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+}
+
+html.theme-light .bg-gradient-mesh,
+body.theme-light .bg-gradient-mesh {
+  background-color: #f1f5f9 !important;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(236, 72, 153, 0.08) 0px, transparent 50%),
+    radial-gradient(at 50% 0%, rgba(16, 185, 129, 0.06) 0px, transparent 50%) !important;
+}
+
+/* Headings & General Text in Light Mode */
+html.theme-light h1, 
+html.theme-light h2, 
+html.theme-light h3, 
+html.theme-light h4, 
+html.theme-light h5, 
+html.theme-light h6 {
+  color: #0f172a !important;
+}
+
+/* Override white and light gray text classes in light mode (excluding solid colored buttons and dark badges) */
+html.theme-light .text-white:not(button):not(button *):not(.btn-neon):not(.btn-neon *):not([class*="bg-indigo-6"]):not([class*="bg-purple-6"]):not([class*="bg-emerald-6"]):not([class*="bg-rose-6"]):not([class*="bg-blue-6"]):not([class*="bg-red-6"]):not([class*="bg-slate-900"]):not([class*="bg-slate-950"]) {
+  color: #0f172a !important;
+}
+
+html.theme-light .text-slate-50,
+html.theme-light .text-slate-100,
+html.theme-light .text-slate-200,
+html.theme-light .text-slate-300,
+html.theme-light .text-gray-50,
+html.theme-light .text-gray-100,
+html.theme-light .text-gray-200,
+html.theme-light .text-gray-300,
+html.theme-light .text-zinc-100,
+html.theme-light .text-zinc-200,
+html.theme-light .text-zinc-300 {
+  color: #0f172a !important;
+  font-weight: 600;
+}
+
+html.theme-light .text-slate-400,
+html.theme-light .text-gray-400,
+html.theme-light .text-zinc-400 {
+  color: #334155 !important;
+  font-weight: 500;
+}
+
+html.theme-light .text-slate-500,
+html.theme-light .text-gray-500,
+html.theme-light .text-zinc-500 {
+  color: #475569 !important;
+  font-weight: 500;
+}
+
+/* Brand & Accent Color Adjustments for Light Backgrounds */
+html.theme-light .text-indigo-400,
+html.theme-light .text-indigo-300,
+html.theme-light .text-indigo-200,
+html.theme-light .text-indigo-100 {
+  color: #3730a3 !important;
+  font-weight: 700;
+}
+
+html.theme-light .text-purple-400,
+html.theme-light .text-purple-300,
+html.theme-light .text-purple-200,
+html.theme-light .text-purple-100 {
+  color: #581c87 !important;
+  font-weight: 700;
+}
+
+html.theme-light .text-emerald-400,
+html.theme-light .text-emerald-300,
+html.theme-light .text-emerald-200,
+html.theme-light .text-teal-400,
+html.theme-light .text-teal-300 {
+  color: #065f46 !important;
+  font-weight: 700;
+}
+
+html.theme-light .text-amber-400,
+html.theme-light .text-amber-300,
+html.theme-light .text-yellow-400,
+html.theme-light .text-yellow-300 {
+  color: #92400e !important;
+  font-weight: 700;
+}
+
+html.theme-light .text-rose-400,
+html.theme-light .text-rose-300,
+html.theme-light .text-red-400,
+html.theme-light .text-red-300 {
+  color: #9f1239 !important;
+  font-weight: 700;
+}
+
+html.theme-light .text-cyan-400,
+html.theme-light .text-cyan-300,
+html.theme-light .text-blue-400,
+html.theme-light .text-blue-300 {
+  color: #1e40af !important;
+  font-weight: 700;
+}
+
+html.theme-light .text-pink-400,
+html.theme-light .text-pink-300 {
+  color: #9d174d !important;
+  font-weight: 700;
+}
+
+html.theme-light .text-gradient {
+  background: linear-gradient(135deg, #3730a3 0%, #6b21a8 50%, #9d174d 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+/* Glass Cards, Panels and Dark Containers in Light Mode */
+html.theme-light .glass-panel {
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #0f172a !important;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.08) !important;
+}
+
+html.theme-light .glass-card {
+  background: #ffffff !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #0f172a !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05) !important;
+}
+
+html.theme-light .glass-card:hover {
+  background: #ffffff !important;
+  border-color: #4f46e5 !important;
+  box-shadow: 0 15px 30px -10px rgba(79, 70, 229, 0.2) !important;
+}
+
+html.theme-light .bg-slate-900,
+html.theme-light .bg-slate-950,
+html.theme-light .bg-slate-900\/60,
+html.theme-light .bg-slate-950\/60,
+html.theme-light .bg-slate-900\/80,
+html.theme-light .bg-slate-900\/90,
+html.theme-light .bg-slate-900\/95,
+html.theme-light .bg-slate-950\/70,
+html.theme-light .bg-slate-950\/80,
+html.theme-light .bg-slate-950\/90,
+html.theme-light .bg-slate-800,
+html.theme-light .bg-slate-800\/80 {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+}
+
+/* Inputs, Selects, Textareas & Options in Light Mode */
+html.theme-light input,
+html.theme-light select,
+html.theme-light textarea {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #94a3b8 !important;
+  font-weight: 600 !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
+}
+
+html.theme-light input::placeholder,
+html.theme-light textarea::placeholder {
+  color: #64748b !important;
+  opacity: 1 !important;
+}
+
+html.theme-light option {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+}
+
+/* Badges & Tags High Contrast in Light Mode */
+html.theme-light .bg-indigo-500\/15,
+html.theme-light .bg-indigo-500\/20,
+html.theme-light .bg-indigo-500\/10 {
+  background-color: #e0e7ff !important;
+  color: #312e81 !important;
+  border-color: #818cf8 !important;
+  font-weight: 700 !important;
+}
+
+html.theme-light .bg-purple-500\/15,
+html.theme-light .bg-purple-500\/20,
+html.theme-light .bg-purple-500\/10 {
+  background-color: #f3e8ff !important;
+  color: #581c87 !important;
+  border-color: #c084fc !important;
+  font-weight: 700 !important;
+}
+
+html.theme-light .bg-emerald-500\/15,
+html.theme-light .bg-emerald-500\/20,
+html.theme-light .bg-emerald-500\/10 {
+  background-color: #d1fae5 !important;
+  color: #065f46 !important;
+  border-color: #34d399 !important;
+  font-weight: 700 !important;
+}
+
+html.theme-light .bg-rose-500\/15,
+html.theme-light .bg-rose-500\/20,
+html.theme-light .bg-rose-500\/10,
+html.theme-light .bg-red-500\/10 {
+  background-color: #ffe4e6 !important;
+  color: #9f1239 !important;
+  border-color: #f87171 !important;
+  font-weight: 700 !important;
+}
+
+html.theme-light .bg-amber-500\/15,
+html.theme-light .bg-amber-500\/20,
+html.theme-light .bg-amber-500\/10 {
+  background-color: #fef3c7 !important;
+  color: #92400e !important;
+  border-color: #fbbf24 !important;
+  font-weight: 700 !important;
+}
+
+/* Toast Notifications & Alerts in Light Mode */
+html.theme-light .toast-card,
+html.theme-light .animate-toast-in {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15) !important;
+}
+
+html.theme-light .toast-card div,
+html.theme-light .toast-card p,
+html.theme-light .toast-card span,
+html.theme-light .toast-card button {
+  color: #0f172a !important;
+  font-weight: 700 !important;
+}
+
+/* Tables in Light Mode */
+html.theme-light table, 
+html.theme-light th, 
+html.theme-light td {
+  border-color: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+html.theme-light th {
+  background-color: #f1f5f9 !important;
+  color: #1e293b !important;
+  font-weight: 700 !important;
+}
+
+html.theme-light tr:hover {
+  background-color: #f8fafc !important;
+}
+
+/* Borders in Light Mode */
+html.theme-light .border-white\/10,
+html.theme-light .border-white\/15,
+html.theme-light .border-white\/20,
+html.theme-light .border-white\/5,
+html.theme-light .border-slate-700\/80,
+html.theme-light .border-slate-800,
+html.theme-light .border-indigo-500\/30 {
+  border-color: #cbd5e1 !important;
+}
+
+/*
+ * Leaflet Map Containment
+ */
+.leaflet-map-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 420px;
+  overflow: hidden;
+  border-radius: 1rem;
+}
+
+/* Prevent tile images from leaking outside */
+.leaflet-tile {
+  position: absolute !important;
+}
+
+/* Ensure the map pane respects parent bounds */
+.leaflet-map-pane {
+  z-index: 0 !important;
+}

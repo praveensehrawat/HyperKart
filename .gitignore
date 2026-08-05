@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+
+# Builds & Outputs
+dist/
+build/
+target/
+*.jar
+*.war
+
+# Environment & Secrets
+.env
+!.env.example
+
+# IDE & OS
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
