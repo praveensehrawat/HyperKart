@@ -115,7 +115,8 @@ public class DemoDataSeeder implements CommandLineRunner {
             seller1 = userRepository.save(seller1);
         }
 
-        Seller s1 = sellerRepository.findById("seller-chawla").orElse(null);
+        Seller s1 = sellerRepository.findByUserId(seller1.getId())
+                .orElseGet(() -> sellerRepository.findById("seller-chawla").orElse(null));
         if (s1 == null) {
             s1 = Seller.builder()
                     .id("seller-chawla")
@@ -129,10 +130,18 @@ public class DemoDataSeeder implements CommandLineRunner {
                     .status("APPROVED")
                     .build();
         } else {
+            s1.setUserId(seller1.getId());
             s1.setStatus("APPROVED");
             s1.setActive(true);
+            if (s1.getLocation() == null) {
+                s1.setLocation(new GeoJsonPoint(76.822, 30.665));
+            }
         }
-        sellerRepository.save(s1);
+        try {
+            sellerRepository.save(s1);
+        } catch (Exception e) {
+            // Ignore duplicate key if already present
+        }
 
         // 3. Initialize Seller 2 User & Shop Profile
         String seller2Email = "johnndoe@gmail.com";
@@ -147,7 +156,8 @@ public class DemoDataSeeder implements CommandLineRunner {
             seller2 = userRepository.save(seller2);
         }
 
-        Seller s2 = sellerRepository.findById("seller-fresh").orElse(null);
+        Seller s2 = sellerRepository.findByUserId(seller2.getId())
+                .orElseGet(() -> sellerRepository.findById("seller-fresh").orElse(null));
         if (s2 == null) {
             s2 = Seller.builder()
                     .id("seller-fresh")
@@ -161,10 +171,18 @@ public class DemoDataSeeder implements CommandLineRunner {
                     .status("APPROVED")
                     .build();
         } else {
+            s2.setUserId(seller2.getId());
             s2.setStatus("APPROVED");
             s2.setActive(true);
+            if (s2.getLocation() == null) {
+                s2.setLocation(new GeoJsonPoint(76.825, 30.655));
+            }
         }
-        sellerRepository.save(s2);
+        try {
+            sellerRepository.save(s2);
+        } catch (Exception e) {
+            // Ignore duplicate key if already present
+        }
 
         // 4. Initialize Seller 3 User & Pharmacy Shop Profile
         String seller3Email = "medplus.seller@gmail.com";
@@ -179,7 +197,8 @@ public class DemoDataSeeder implements CommandLineRunner {
             seller3 = userRepository.save(seller3);
         }
 
-        Seller s3 = sellerRepository.findById("seller-medplus").orElse(null);
+        Seller s3 = sellerRepository.findByUserId(seller3.getId())
+                .orElseGet(() -> sellerRepository.findById("seller-medplus").orElse(null));
         if (s3 == null) {
             s3 = Seller.builder()
                     .id("seller-medplus")
@@ -193,10 +212,18 @@ public class DemoDataSeeder implements CommandLineRunner {
                     .status("APPROVED")
                     .build();
         } else {
+            s3.setUserId(seller3.getId());
             s3.setStatus("APPROVED");
             s3.setActive(true);
+            if (s3.getLocation() == null) {
+                s3.setLocation(new GeoJsonPoint(76.818, 30.668));
+            }
         }
-        sellerRepository.save(s3);
+        try {
+            sellerRepository.save(s3);
+        } catch (Exception e) {
+            // Ignore duplicate key if already present
+        }
 
         // 5. Initialize Seller 4 User & Apparel Shop Profile
         String seller4Email = "trendz.seller@gmail.com";
@@ -211,7 +238,8 @@ public class DemoDataSeeder implements CommandLineRunner {
             seller4 = userRepository.save(seller4);
         }
 
-        Seller s4 = sellerRepository.findById("seller-trendz").orElse(null);
+        Seller s4 = sellerRepository.findByUserId(seller4.getId())
+                .orElseGet(() -> sellerRepository.findById("seller-trendz").orElse(null));
         if (s4 == null) {
             s4 = Seller.builder()
                     .id("seller-trendz")
@@ -225,10 +253,18 @@ public class DemoDataSeeder implements CommandLineRunner {
                     .status("APPROVED")
                     .build();
         } else {
+            s4.setUserId(seller4.getId());
             s4.setStatus("APPROVED");
             s4.setActive(true);
+            if (s4.getLocation() == null) {
+                s4.setLocation(new GeoJsonPoint(76.814, 30.663));
+            }
         }
-        sellerRepository.save(s4);
+        try {
+            sellerRepository.save(s4);
+        } catch (Exception e) {
+            // Ignore duplicate key if already present
+        }
 
         // 6. Seed/Update Products Catalog with normal market prices
         productRepository.deleteAll(); // Force refresh to update catalog prices

@@ -70,20 +70,6 @@ public class DataInitializer implements CommandLineRunner {
             userRepository.save(sellerUser);
         }
 
-        // Ensure Seller Profile exists
-        if (sellerRepository.findByUserId(sellerUser.getId()).isEmpty()) {
-            Seller sellerProfile = Seller.builder()
-                    .userId(sellerUser.getId())
-                    .shopName("Chawla Kiryana Store")
-                    .description("Your neighborhood grocer for fresh foods, spices, and daily essentials.")
-                    .address("VIP Road, Zirakpur, Punjab")
-                    .phone("9876543210")
-                    .active(true)
-                    .status("APPROVED")
-                    .build();
-            sellerRepository.save(sellerProfile);
-        }
-
         // 3. Seed Driver Account
         if (userRepository.findByEmail("driver@HYPERKART.com").isEmpty()) {
             User driver = User.builder()
