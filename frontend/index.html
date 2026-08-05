@@ -15,12 +15,16 @@
       (function() {
         const saved = localStorage.getItem('app-theme');
         if (saved === 'light') {
+          document.documentElement.classList.remove('theme-dark');
           document.documentElement.classList.add('theme-light');
+          document.documentElement.style.backgroundColor = '#f8fafc';
+          document.documentElement.style.color = '#0f172a';
         } else {
+          document.documentElement.classList.remove('theme-light');
           document.documentElement.classList.add('theme-dark');
-          if (!saved || saved === 'system') {
-            localStorage.setItem('app-theme', 'dark');
-          }
+          document.documentElement.style.backgroundColor = '#0b0f19';
+          document.documentElement.style.color = '#f3f4f6';
+          localStorage.setItem('app-theme', 'dark');
         }
       })();
     </script>

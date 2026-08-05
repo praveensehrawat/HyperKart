@@ -1,4 +1,4 @@
-import { HashRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { Provider, useSelector } from 'react-redux'
 import { store } from './store/store'
 import Layout from './components/Layout'
@@ -50,7 +50,7 @@ function App() {
   return (
     <Provider store={store}>
       <ToastProvider>
-        <HashRouter>
+        <BrowserRouter>
           <Routes>
             <Route element={<Layout />}>
               <Route index element={<RootRedirect />} />
@@ -67,9 +67,11 @@ function App() {
               <Route path="driver-dashboard" element={<DriverDashboard />} />
               <Route path="admin" element={<Admin />} />
               <Route path="admin-dashboard" element={<AdminDashboard />} />
+              {/* Catch-all fallback route */}
+              <Route path="*" element={<RootRedirect />} />
             </Route>
           </Routes>
-        </HashRouter>
+        </BrowserRouter>
       </ToastProvider>
     </Provider>
   )
