@@ -41,6 +41,7 @@ function getApiBaseURL() {
 
 const api = axios.create({
   baseURL: getApiBaseURL(),
+  timeout: 60000, // 60 seconds to support Render free tier cold starts
   headers: { 'Content-Type': 'application/json' },
 })
 
@@ -53,10 +54,18 @@ api.interceptors.request.use((config) => {
   return config
 })
 
-// Response Interceptor: Catch authorization failures (expired/invalid token)
+// Response Interceptor: Handle network cold starts and authorization failures
 api.interceptors.response.use(
   (res) => res,
-  (err) => {
+  async (err) => {
+    const config = err.config
+    // Auto-retry once on cold start network timeout
+    if ((err.message === 'Network Error' || err.code === 'ECONNABORTED') && config && !config._retry) {
+      config._retry = true
+      await new Promise((r) => setTimeout(r, 2000))
+      return api(config)
+    }
+
     if (err.response?.status === 401) {
       // Clear invalid credentials and redirect to Login page
       localStorage.removeItem('token')

@@ -37,9 +37,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
 
-        String authHeader = request.getHeader("Authorization");
-        // Bypasses evaluation if bearer prefix is missing
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+        // Bypasses evaluation if HTTP OPTIONS preflight or bearer prefix is missing
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod()) || authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }

@@ -52,6 +52,8 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+                        // Permit all OPTIONS preflight requests
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         // Frontend static assets, uploads and SPA routes
                         .requestMatchers("/", "/index.html", "/favicon.svg", "/icons.svg", "/assets/**", "/uploads/**").permitAll()
                         .requestMatchers("/login", "/register", "/products", "/sellers", "/cart",

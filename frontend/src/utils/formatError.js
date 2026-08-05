@@ -6,6 +6,10 @@ export function formatError(err, defaultMsg = 'An unexpected error occurred. Ple
   if (!err) return '';
   if (typeof err === 'string') return err;
   
+  if (err.message === 'Network Error' || err.code === 'ECONNABORTED') {
+    return 'Connecting to cloud backend... Free tier instance is waking up from sleep, please try again in a few seconds!';
+  }
+
   // Extract response data from Axios errors
   const data = err.response?.data || err.data || err;
   
