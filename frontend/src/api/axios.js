@@ -15,23 +15,28 @@ import axios from 'axios'
  */
 /**
  * Dynamically resolve the backend API base URL.
- * - Prioritizes VITE_API_URL if provided in environment configuration
+ * - Prioritizes VITE_API_BASE_URL or VITE_API_URL environment variables
  * - In Vite dev mode (port 5173): use proxy path '/api'
- * - On local dev network: use host with port 8090
- * - On production web hosts (e.g. InfinityFree): fallback to relative '/api' or VITE_API_URL
+ * - On local dev network: use host with port 8085
+ * - On production hosts (Vercel): fallback to live Render backend URL
  */
 function getApiBaseURL() {
-  if (import.meta.env.VITE_API_URL) {
-    return import.meta.env.VITE_API_URL
+  const envUrl = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL
+  if (envUrl && envUrl.trim()) {
+    let cleanUrl = envUrl.trim()
+    if (!cleanUrl.endsWith('/api')) {
+      cleanUrl = cleanUrl.replace(/\/+$/, '') + '/api'
+    }
+    return cleanUrl
   }
   if (window.location.port === '5173') return '/api'
   const host = window.location.hostname
   const protocol = window.location.protocol === 'https:' ? 'https:' : 'http:'
-  // If accessing locally or via LAN IP on mobile Wi-Fi (e.g. 172.22.x.x, 192.168.x.x, 10.x.x.x)
   if (host === 'localhost' || host === '127.0.0.1' || /^(\d{1,3}\.){3}\d{1,3}$/.test(host)) {
     return `${protocol}//${host}:8085/api`
   }
-  return '/api'
+  // Production fallback to live Render backend
+  return 'https://hyperkart-backend.onrender.com/api'
 }
 
 const api = axios.create({
@@ -56,8 +61,8 @@ api.interceptors.response.use(
       // Clear invalid credentials and redirect to Login page
       localStorage.removeItem('token')
       localStorage.removeItem('user')
-      if (!window.location.hash.includes('login')) {
-        window.location.hash = '#/login'
+      if (!window.location.pathname.includes('login')) {
+        window.location.href = '/login'
       }
     }
     return Promise.reject(err)
