@@ -2,8 +2,7 @@ services:
   - type: web
     name: hyperkart-backend
     env: docker
-    dockerfilePath: ./backend/demo/Dockerfile
-    dockerContext: ./backend/demo
+    dockerfilePath: Dockerfile
     plan: free
     healthCheckPath: /api/health
     envVars:
