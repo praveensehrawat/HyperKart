@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: hyperkart-backend
+    env: docker
+    dockerfilePath: ./backend/demo/Dockerfile
+    dockerContext: ./backend/demo
+    plan: free
+    healthCheckPath: /api/health
+    envVars:
+      - key: SPRING_DATA_MONGODB_URI
+        value: mongodb+srv://goolgl744_db_user:8Ci56qVdWaHCjg3J@cluster0.7ptdrly.mongodb.net/hyperkartdb?retryWrites=true&w=majority
+      - key: SERVER_PORT
+        value: "8085"
+      - key: JWT_SECRET
+        value: HYPERKART-commerce-jwt-secret-key-change-in-production-min-256-bits
