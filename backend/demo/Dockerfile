@@ -11,5 +11,5 @@ FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 RUN mkdir -p uploads
-EXPOSE 8085 10000
+EXPOSE 8080
 ENTRYPOINT ["java", "-Xms128m", "-Xmx384m", "-Djava.net.preferIPv4Stack=true", "-jar", "app.jar"]
