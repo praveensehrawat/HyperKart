@@ -74,6 +74,17 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * Intercepts MongoDB database connection failures and timeouts cleanly.
+     *
+     * @return 503 Service Unavailable payload
+     */
+    @ExceptionHandler({org.springframework.dao.DataAccessException.class, com.mongodb.MongoException.class})
+    public ResponseEntity<Map<String, String>> handleDatabaseException(Exception ex) {
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                .body(Map.of("error", "Database connection issue. Connecting to MongoDB Atlas cloud instance, please retry in a few seconds."));
+    }
+
+    /**
      * Catches generic unhandled runtime errors.
      *
      * @return 500 Internal Server Error payload
