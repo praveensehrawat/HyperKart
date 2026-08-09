@@ -54,15 +54,27 @@ api.interceptors.request.use((config) => {
   return config
 })
 
-// Response Interceptor: Handle network cold starts and authorization failures
+// Response Interceptor: Handle network cold starts, 502 Bad Gateway, and authorization failures
 api.interceptors.response.use(
   (res) => res,
   async (err) => {
     const config = err.config
-    // Auto-retry once on cold start network timeout
-    if ((err.message === 'Network Error' || err.code === 'ECONNABORTED') && config && !config._retry) {
-      config._retry = true
-      await new Promise((r) => setTimeout(r, 2000))
+    if (!config) return Promise.reject(err)
+
+    // Track retry count on config object
+    config._retryCount = config._retryCount || 0
+
+    const isNetworkOr502Error =
+      err.message === 'Network Error' ||
+      err.code === 'ECONNABORTED' ||
+      err.response?.status === 502 ||
+      err.response?.status === 503 ||
+      err.response?.status === 504
+
+    if (isNetworkOr502Error && config._retryCount < 3) {
+      config._retryCount += 1
+      const backoffDelay = config._retryCount * 2500 // 2.5s, 5.0s, 7.5s
+      await new Promise((resolve) => setTimeout(resolve, backoffDelay))
       return api(config)
     }
 
