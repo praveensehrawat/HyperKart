@@ -33,7 +33,7 @@ function getApiBaseURL() {
   const host = window.location.hostname
   const protocol = window.location.protocol === 'https:' ? 'https:' : 'http:'
   if (host === 'localhost' || host === '127.0.0.1' || /^(\d{1,3}\.){3}\d{1,3}$/.test(host)) {
-    return `${protocol}//${host}:8085/api`
+    return `${protocol}//${host}:8080/api`
   }
   // Production fallback to live Render backend
   return 'https://hyperkart-backend.onrender.com/api'

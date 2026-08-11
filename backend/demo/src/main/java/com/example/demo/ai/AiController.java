@@ -52,12 +52,12 @@ public class AiController {
      */
     @GetMapping("/search")
     public ResponseEntity<Map<String, Object>> search(
-            @RequestParam String q,
+            @RequestParam(required = false, defaultValue = "") String q,
             @RequestParam(required = false) Double lat,
             @RequestParam(required = false) Double lng,
             @RequestParam(required = false) String weather,
             @RequestParam(required = false) String timeOfDay) {
-        return ResponseEntity.ok(aiService.smartSearch(q, lat, lng, weather, timeOfDay));
+        return ResponseEntity.ok(aiService.smartSearch(q.isBlank() ? null : q, lat, lng, weather, timeOfDay));
     }
 
     /**
