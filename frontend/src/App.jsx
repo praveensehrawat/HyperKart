@@ -1,6 +1,8 @@
+import { useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { Provider, useSelector } from 'react-redux'
 import { store } from './store/store'
+import api from './api/axios'
 import Layout from './components/Layout'
 import { ToastProvider } from './components/Toast'
 
@@ -47,6 +49,11 @@ function RootRedirect() {
 }
 
 function App() {
+  // Silent background ping to wake up free tier cloud backend on page load
+  useEffect(() => {
+    api.get('/health').catch(() => {})
+  }, [])
+
   return (
     <Provider store={store}>
       <ToastProvider>
