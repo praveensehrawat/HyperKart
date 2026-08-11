@@ -120,7 +120,7 @@ public class DataInitializer implements CommandLineRunner {
         log.info("Seeded Buyer Account: buyer@hyperkart.com / Password123!");
 
         // 5. Seed Demo Seller Shops if none exist
-        if (sellerRepository.count() == 0) {
+        if (sellerRepository.findAll().isEmpty()) {
             Seller freshMart = Seller.builder()
                     .userId(sellerUser.getId())
                     .shopName("Fresh & Organic Supermarket")
@@ -158,8 +158,8 @@ public class DataInitializer implements CommandLineRunner {
             log.info("Seeded 3 Demo Seller Shops successfully!");
         }
 
-        // 6. Seed Demo Products if none exist
-        if (productRepository.count() == 0) {
+        // 6. Seed Demo Products if none exist or none are active
+        if (productRepository.findByActiveTrue().isEmpty()) {
             List<Seller> sellers = sellerRepository.findAll();
             String defaultSellerId = sellers.isEmpty() ? sellerUser.getId() : sellers.get(0).getId();
 

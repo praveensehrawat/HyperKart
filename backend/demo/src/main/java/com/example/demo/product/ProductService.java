@@ -35,7 +35,6 @@ public class ProductService {
      * Clears all cached product lists to ensure consistency.
      * Broadcasts a WebSocket event notifying clients of the new product.
      */
-    @CacheEvict(value = "products", allEntries = true)
     public Product create(String userEmail, ProductRequest request) {
         User user = userService.findByEmail(userEmail);
         Seller seller = sellerRepository.findByUserId(user.getId())
@@ -73,9 +72,7 @@ public class ProductService {
 
     /**
      * Retrieves a page of active products.
-     * Caches result arrays by page number and size context keys.
      */
-    @Cacheable(value = "products", key = "#pageable.pageNumber + '-' + #pageable.pageSize")
     public Page<Product> findAll(Pageable pageable) {
         return productRepository.findByActiveTrue(pageable);
     }
@@ -118,7 +115,6 @@ public class ProductService {
      * Validates that the updating user owns the target product entry.
      * Publishes real-time stock alert messages over the STOMP updates topic.
      */
-    @CacheEvict(value = "products", allEntries = true)
     public Product update(String userEmail, String id, ProductRequest request) {
         User user = userService.findByEmail(userEmail);
         Product product = findById(id);
@@ -154,7 +150,6 @@ public class ProductService {
      * Performs a soft delete operation on a product catalog entry.
      * Sets active status flag to false to preserve historical order lookups.
      */
-    @CacheEvict(value = "products", allEntries = true)
     public void delete(String userEmail, String id) {
         User user = userService.findByEmail(userEmail);
         Product product = findById(id);
