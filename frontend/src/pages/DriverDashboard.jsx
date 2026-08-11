@@ -86,7 +86,7 @@ export default function DriverDashboard() {
 
   // Route protection
   useEffect(() => {
-    if (!user || (user.role !== 'DRIVER' && user.role !== 'ADMIN')) {
+    if (!user || (user.role !== 'DRIVER' && user.role !== 'CAPTAIN' && user.role !== 'ADMIN')) {
       navigate('/')
     }
   }, [user, navigate])
@@ -419,16 +419,16 @@ export default function DriverDashboard() {
               </span>
             </div>
             <h2 className="text-3xl md:text-4xl font-black text-gray-100 tracking-tight">
-              Welcome, {user?.name || 'Delivery Partner'} 👋
+              Welcome, {user?.name || 'Delivery Captain'} 👋
             </h2>
             <p className="text-gray-400 text-xs mt-1">
-              Your official delivery agent portal: claim nearby packages, follow turn-by-turn route maps, verify 4-digit OTPs, and track daily wallet earnings.
+              Your official delivery captain portal: claim nearby packages, follow turn-by-turn route maps, verify 4-digit OTPs, and track daily wallet earnings.
             </p>
           </div>
 
           <div className="flex items-center gap-3 bg-slate-950/80 p-3 rounded-2xl border border-white/10 flex-shrink-0">
             <div className="text-right">
-              <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block">Partner Duty Status</span>
+              <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block">Captain Duty Status</span>
               <span className="text-xs font-black text-emerald-400 flex items-center gap-1.5 justify-end">
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
                 🟢 ON DUTY / ONLINE
@@ -456,7 +456,7 @@ export default function DriverDashboard() {
           onClick={() => setTab('wallet')}
           className={`px-4 py-2 text-xs font-bold rounded-xl transition-all cursor-pointer ${tab === 'wallet' ? 'bg-emerald-600 border border-emerald-500/20 text-white shadow-lg' : 'bg-slate-900 border border-white/5 text-gray-400'}`}
         >
-          💼 Driver Wallet & Earnings (${walletData?.availableBalance?.toFixed(2) || '0.00'})
+          💼 Captain Wallet & Earnings (${walletData?.availableBalance?.toFixed(2) || '0.00'})
         </button>
       </div>
 

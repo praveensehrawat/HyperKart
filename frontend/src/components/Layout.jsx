@@ -244,7 +244,7 @@ export default function Layout() {
 
             {/* Helper to calculate brand home link */}
             <Link 
-              to={user ? (user.role === 'ADMIN' ? '/admin' : user.role === 'SELLER' ? '/seller-dashboard' : user.role === 'DRIVER' ? '/driver-dashboard' : '/products') : '/login'} 
+              to={user ? (user.role === 'ADMIN' ? '/admin' : user.role === 'SELLER' ? '/seller-dashboard' : (user.role === 'CAPTAIN' || user.role === 'DRIVER') ? '/driver-dashboard' : '/products') : '/login'} 
               onClick={() => setMobileMenuOpen(false)}
               className="flex items-center gap-2 group"
             >
@@ -260,8 +260,8 @@ export default function Layout() {
           </div>
 
 
-          {/* Header Interactive AI Search Bar (Available for everyone EXCEPT DRIVER) */}
-          {user?.role !== 'DRIVER' && (
+          {/* Header Interactive AI Search Bar (Available for everyone EXCEPT CAPTAIN) */}
+          {user?.role !== 'DRIVER' && user?.role !== 'CAPTAIN' && (
             <form onSubmit={handleAiSearchSubmit} className="hidden lg:flex items-center flex-1 max-w-sm mx-4 relative group font-Outfit">
               <div className="relative w-full">
                 <input
@@ -284,8 +284,8 @@ export default function Layout() {
 
           {/* Desktop Navigation Links (Pill Style with Active Glow) */}
           <div className="hidden md:flex items-center gap-1.5 font-Outfit">
-            {/* Products & Sellers links available for portals EXCEPT DRIVER */}
-            {user?.role !== 'DRIVER' && (
+            {/* Products & Sellers links available for portals EXCEPT CAPTAIN */}
+            {user?.role !== 'DRIVER' && user?.role !== 'CAPTAIN' && (
               <>
                 <Link to="/products" className={getNavLinkClass('/products')}>
                   <span>📦</span> Products
@@ -297,8 +297,8 @@ export default function Layout() {
               </>
             )}
 
-            {/* Cart is hidden for DRIVER, SELLER, & ADMIN */}
-            {user?.role !== 'SELLER' && user?.role !== 'ADMIN' && user?.role !== 'DRIVER' && (
+            {/* Cart is hidden for CAPTAIN, SELLER, & ADMIN */}
+            {user?.role !== 'SELLER' && user?.role !== 'ADMIN' && user?.role !== 'DRIVER' && user?.role !== 'CAPTAIN' && (
               <Link to="/cart" className={`${getNavLinkClass('/cart')} relative`}>
                 <span>🛒</span> Cart
                 {cartItemCount > 0 && (
@@ -309,10 +309,10 @@ export default function Layout() {
               </Link>
             )}
 
-            {/* Delivery Partner Dedicated Link */}
-            {(user?.role === 'DRIVER' || user?.role === 'ADMIN') && (
+            {/* Delivery Captain Dedicated Link */}
+            {(user?.role === 'CAPTAIN' || user?.role === 'DRIVER' || user?.role === 'ADMIN') && (
               <Link to="/driver-dashboard" className={`${getNavLinkClass('/driver-dashboard')} text-emerald-400 font-extrabold`}>
-                <span>🚴</span> Delivery Portal
+                <span>🚴</span> Captain Portal
               </Link>
             )}
 
@@ -434,13 +434,13 @@ export default function Layout() {
                         </Link>
                       )}
 
-                      {(user.role === 'DRIVER' || user.role === 'ADMIN') && (
+                      {(user.role === 'CAPTAIN' || user.role === 'DRIVER' || user.role === 'ADMIN') && (
                         <Link 
                           to="/driver-dashboard" 
                           onClick={() => setProfileMenuOpen(false)}
                           className="flex items-center justify-between px-3 py-2 rounded-xl text-emerald-400 hover:bg-emerald-500/10 font-bold transition-colors"
                         >
-                          <span>🚴 Delivery Portal</span>
+                          <span>🚴 Captain Portal</span>
                           <span className="text-[10px]">→</span>
                         </Link>
                       )}

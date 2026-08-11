@@ -38,16 +38,22 @@ public class UserService {
      */
     public AuthResponse register(RegisterRequest request, String ipAddress) {
         String cleanEmail = request.getEmail() != null ? request.getEmail().trim().toLowerCase() : "";
+        if (cleanEmail.isEmpty()) {
+            throw new IllegalArgumentException("Email address is required.");
+        }
         if (userRepository.existsByEmailIgnoreCase(cleanEmail)) {
-            throw new IllegalArgumentException("Email already registered");
+            throw new IllegalArgumentException("Email '" + cleanEmail + "' is already registered. Please login or use a different email.");
         }
 
         String role = request.getRole() != null ? request.getRole().toUpperCase() : "BUYER";
+        if ("DRIVER".equals(role)) {
+            role = "CAPTAIN";
+        }
         if (role.equals("ADMIN")) {
             throw new IllegalArgumentException("Registration with ADMIN role is not permitted.");
         }
-        if (!role.equals("BUYER") && !role.equals("SELLER") && !role.equals("DRIVER")) {
-            throw new IllegalArgumentException("Role must be BUYER, SELLER or DRIVER");
+        if (!role.equals("BUYER") && !role.equals("SELLER") && !role.equals("CAPTAIN")) {
+            throw new IllegalArgumentException("Role must be BUYER, SELLER or CAPTAIN");
         }
 
         String now = java.time.format.DateTimeFormatter.ISO_INSTANT.format(java.time.Instant.now());
@@ -78,7 +84,7 @@ public class UserService {
      * Generates signed JWT session tokens and updates client IP address.
      */
     public AuthResponse login(LoginRequest request, String ipAddress) {
-        String cleanEmail = request.getEmail() != null ? request.getEmail().trim() : "";
+        String cleanEmail = request.getEmail() != null ? request.getEmail().trim().toLowerCase() : "";
         User user = userRepository.findByEmailIgnoreCase(cleanEmail)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid email or password"));
 
@@ -117,26 +123,31 @@ public class UserService {
      * Authenticates or auto-registers a user signing in via Google or Facebook.
      */
     public AuthResponse socialLogin(com.example.demo.auth.dto.SocialAuthRequest request, String ipAddress) {
-        String email = request.getEmail();
-        if (email == null || email.trim().isEmpty()) {
+        String rawEmail = request.getEmail();
+        if (rawEmail == null || rawEmail.trim().isEmpty()) {
             throw new IllegalArgumentException("Social authentication failed: Email address is required from provider.");
         }
 
+        String cleanEmail = rawEmail.trim().toLowerCase();
         String provider = request.getProvider() != null ? request.getProvider().toUpperCase() : "GOOGLE";
         String role = request.getRole() != null ? request.getRole().toUpperCase() : "BUYER";
+        if ("DRIVER".equals(role)) {
+            role = "CAPTAIN";
+        }
         if (role.equals("ADMIN")) {
             role = "BUYER";
         }
 
         String now = java.time.format.DateTimeFormatter.ISO_INSTANT.format(java.time.Instant.now());
 
-        User user = userRepository.findByEmail(email.trim()).orElse(null);
+        // Case-insensitive lookup prevents duplicate account creation for identical emails
+        User user = userRepository.findByEmailIgnoreCase(cleanEmail).orElse(null);
 
         if (user == null) {
             // New user registration via Social Login
             user = User.builder()
-                    .name(request.getName() != null && !request.getName().isBlank() ? request.getName() : email.split("@")[0])
-                    .email(email.trim())
+                    .name(request.getName() != null && !request.getName().isBlank() ? request.getName() : cleanEmail.split("@")[0])
+                    .email(cleanEmail)
                     .password(null) // No local password for social accounts
                     .role(role)
                     .provider(provider)

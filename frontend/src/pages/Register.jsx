@@ -193,7 +193,7 @@ export default function Register() {
           >
             <option value="BUYER">Buyer (Shop from local stores)</option>
             <option value="SELLER">Seller (Manage shop and inventory)</option>
-            <option value="DRIVER">Driver (Deliver HYPERKART orders)</option>
+            <option value="CAPTAIN">Captain (Deliver HYPERKART orders)</option>
           </select>
         </div>
 

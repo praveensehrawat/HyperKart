@@ -77,26 +77,26 @@ public class DataInitializer implements CommandLineRunner {
         sellerUser = userRepository.save(sellerUser);
         log.info("Seeded Seller Account: john.doe@gmail.com / Password123!");
 
-        // 3. Seed Driver Account
-        String driverEmail = "driver@hyperkart.com";
-        User driver = userRepository.findByEmailIgnoreCase(driverEmail)
-                .orElseGet(() -> userRepository.findByEmailIgnoreCase("driver@HYPERKART.com").orElse(null));
-        if (driver == null) {
-            driver = User.builder()
-                    .name("Rajesh Express Driver")
-                    .email(driverEmail)
+        // 3. Seed Captain Account
+        String captainEmail = "captain@hyperkart.com";
+        User captain = userRepository.findByEmailIgnoreCase(captainEmail)
+                .orElseGet(() -> userRepository.findByEmailIgnoreCase("driver@hyperkart.com").orElse(null));
+        if (captain == null) {
+            captain = User.builder()
+                    .name("Rajesh Express Captain")
+                    .email(captainEmail)
                     .password(defaultPass)
-                    .role("DRIVER")
+                    .role("CAPTAIN")
                     .provider("LOCAL")
                     .forceLoggedOut(false)
                     .build();
         } else {
-            driver.setEmail(driverEmail);
-            driver.setPassword(defaultPass);
-            driver.setRole("DRIVER");
+            captain.setEmail(captainEmail);
+            captain.setPassword(defaultPass);
+            captain.setRole("CAPTAIN");
         }
-        userRepository.save(driver);
-        log.info("Seeded Driver Account: driver@hyperkart.com / Password123!");
+        userRepository.save(captain);
+        log.info("Seeded Captain Account: captain@hyperkart.com / Password123!");
 
         // 4. Seed Buyer Account
         String buyerEmail = "buyer@hyperkart.com";

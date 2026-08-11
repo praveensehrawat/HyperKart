@@ -28,6 +28,7 @@ export default function SocialAuthButtons({ selectedRole = 'BUYER', mode = 'logi
         return '/admin'
       case 'SELLER':
         return '/seller-dashboard'
+      case 'CAPTAIN':
       case 'DRIVER':
         return '/driver-dashboard'
       default:
@@ -261,7 +262,7 @@ export default function SocialAuthButtons({ selectedRole = 'BUYER', mode = 'logi
                 >
                   <option value="BUYER">Buyer (Shop from local stores)</option>
                   <option value="SELLER">Seller (Manage shop and inventory)</option>
-                  <option value="DRIVER">Driver (Deliver HYPERKART orders)</option>
+                  <option value="CAPTAIN">Captain (Deliver HYPERKART orders)</option>
                 </select>
               </div>
             </div>

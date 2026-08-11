@@ -71,14 +71,14 @@ public class SecurityConfig {
                         .requestMatchers("/api/wallet/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
 
-                        // Endpoints for Drivers
-                        .requestMatchers("/api/orders/*/claim").hasAnyRole("DRIVER", "ADMIN")
-                        .requestMatchers("/api/orders/*/driver-location").hasAnyRole("DRIVER", "ADMIN")
-                        .requestMatchers("/api/orders/*/deliver").hasAnyRole("DRIVER", "ADMIN")
-                        .requestMatchers("/api/orders/*/verify-otp").hasAnyRole("DRIVER", "ADMIN")
-                        .requestMatchers("/api/orders/pending-delivery").hasAnyRole("DRIVER", "ADMIN")
-                        .requestMatchers("/api/orders/driver/active").hasAnyRole("DRIVER", "ADMIN")
-                        .requestMatchers("/api/wallet/driver/**").hasAnyRole("DRIVER", "ADMIN")
+                        // Endpoints for Captains & Logistics Partners
+                        .requestMatchers("/api/orders/*/claim").hasAnyRole("CAPTAIN", "DRIVER", "ADMIN")
+                        .requestMatchers("/api/orders/*/driver-location").hasAnyRole("CAPTAIN", "DRIVER", "ADMIN")
+                        .requestMatchers("/api/orders/*/deliver").hasAnyRole("CAPTAIN", "DRIVER", "ADMIN")
+                        .requestMatchers("/api/orders/*/verify-otp").hasAnyRole("CAPTAIN", "DRIVER", "ADMIN")
+                        .requestMatchers("/api/orders/pending-delivery").hasAnyRole("CAPTAIN", "DRIVER", "ADMIN")
+                        .requestMatchers("/api/orders/driver/active").hasAnyRole("CAPTAIN", "DRIVER", "ADMIN")
+                        .requestMatchers("/api/wallet/driver/**").hasAnyRole("CAPTAIN", "DRIVER", "ADMIN")
 
                         // Endpoints for Sellers
                         .requestMatchers(HttpMethod.POST, "/api/upload/**").hasAnyRole("SELLER", "ADMIN")

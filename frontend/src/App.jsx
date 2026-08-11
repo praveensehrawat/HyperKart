@@ -41,6 +41,7 @@ function RootRedirect() {
       return <Navigate to="/admin" replace />
     case 'SELLER':
       return <Navigate to="/seller-dashboard" replace />
+    case 'CAPTAIN':
     case 'DRIVER':
       return <Navigate to="/driver-dashboard" replace />
     default:
