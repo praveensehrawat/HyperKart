@@ -94,12 +94,11 @@ export default function SocialAuthButtons({ selectedRole = 'BUYER', mode = 'logi
       })
       window.google.accounts.id.prompt()
     } else {
-      // Direct 1-Click Instant Login (No intermediate modal)
-      const randomId = Math.floor(Math.random() * 900 + 100)
+      // Direct instant login with email and credentials (No intermediate modal)
       handleSocialAuth('GOOGLE', {
-        id: `google_${Date.now()}_${randomId}`,
-        email: `google.user.${randomId}@gmail.com`,
-        name: 'Google User',
+        id: `google_${Date.now()}`,
+        email: 'google.user@gmail.com',
+        name: 'Google Account User',
         picture: 'https://lh3.googleusercontent.com/a/default-user=s96-c'
       })
     }
@@ -125,11 +124,10 @@ export default function SocialAuthButtons({ selectedRole = 'BUYER', mode = 'logi
         }
       }, { scope: 'public_profile,email' })
     } else {
-      // Direct 1-Click Instant Login (No intermediate modal)
-      const randomId = Math.floor(Math.random() * 900 + 100)
+      // Direct instant login with email and credentials (No intermediate modal)
       handleSocialAuth('FACEBOOK', {
-        id: `facebook_${Date.now()}_${randomId}`,
-        email: `fb.user.${randomId}@facebook.com`,
+        id: `facebook_${Date.now()}`,
+        email: 'facebook.user@facebook.com',
         name: 'Facebook User',
         picture: 'https://graph.facebook.com/v19.0/me/picture?type=normal'
       })
