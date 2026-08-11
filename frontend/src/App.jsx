@@ -49,9 +49,13 @@ function RootRedirect() {
 }
 
 function App() {
-  // Silent background ping to wake up free tier cloud backend on page load
+  // Silent background ping and 4-minute heartbeat to keep cloud backend 100% awake 24/7
   useEffect(() => {
     api.get('/health').catch(() => {})
+    const interval = setInterval(() => {
+      api.get('/health').catch(() => {})
+    }, 4 * 60 * 1000)
+    return () => clearInterval(interval)
   }, [])
 
   return (
