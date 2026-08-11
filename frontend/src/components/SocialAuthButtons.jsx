@@ -94,10 +94,14 @@ export default function SocialAuthButtons({ selectedRole = 'BUYER', mode = 'logi
       })
       window.google.accounts.id.prompt()
     } else {
-      // Open interactive OAuth simulation prompt
-      setCustomName('Google Account User')
-      setCustomEmail(`google.user.${Math.floor(Math.random() * 900 + 100)}@gmail.com`)
-      setShowDemoModal('GOOGLE')
+      // Direct 1-Click Instant Login (No intermediate modal)
+      const randomId = Math.floor(Math.random() * 900 + 100)
+      handleSocialAuth('GOOGLE', {
+        id: `google_${Date.now()}_${randomId}`,
+        email: `google.user.${randomId}@gmail.com`,
+        name: 'Google User',
+        picture: 'https://lh3.googleusercontent.com/a/default-user=s96-c'
+      })
     }
   }
 
@@ -121,10 +125,14 @@ export default function SocialAuthButtons({ selectedRole = 'BUYER', mode = 'logi
         }
       }, { scope: 'public_profile,email' })
     } else {
-      // Open interactive OAuth simulation prompt
-      setCustomName('Facebook Account User')
-      setCustomEmail(`fb.user.${Math.floor(Math.random() * 900 + 100)}@facebook.com`)
-      setShowDemoModal('FACEBOOK')
+      // Direct 1-Click Instant Login (No intermediate modal)
+      const randomId = Math.floor(Math.random() * 900 + 100)
+      handleSocialAuth('FACEBOOK', {
+        id: `facebook_${Date.now()}_${randomId}`,
+        email: `fb.user.${randomId}@facebook.com`,
+        name: 'Facebook User',
+        picture: 'https://graph.facebook.com/v19.0/me/picture?type=normal'
+      })
     }
   }
 
