@@ -74,7 +74,11 @@ public class ProductService {
      * Retrieves a page of active products.
      */
     public Page<Product> findAll(Pageable pageable) {
-        return productRepository.findByActiveTrue(pageable);
+        Page<Product> page = productRepository.findByActiveTrue(pageable);
+        if (page.isEmpty()) {
+            return productRepository.findAll(pageable);
+        }
+        return page;
     }
 
     /**

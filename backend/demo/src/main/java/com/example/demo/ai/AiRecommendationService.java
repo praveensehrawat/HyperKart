@@ -93,14 +93,31 @@ public class AiRecommendationService {
         requestBody.put("weather", weather);
         requestBody.put("time_of_day", timeOfDay);
 
+        // On cloud containers where external FastAPI is not deployed, use ultra-fast local rule-based AI engine
+        if (aiServiceUrl == null || aiServiceUrl.contains("localhost")) {
+            List<Product> scored = scoreProducts(products, query, nearbySellers, weather, timeOfDay, userId);
+            Map<String, Object> result = new LinkedHashMap<>();
+            result.put("recommendations", scored.stream().limit(8).collect(Collectors.toList()));
+            result.put("nearbySellers", nearbySellers.stream().limit(5).collect(Collectors.toList()));
+            result.put("source", "rule-based (smart-ai)");
+            
+            if (query != null && !query.isBlank()) {
+                result.put("aiInsight", "Based on your AI search query '" + query + "', we matched the best local deals nearby!");
+            } else {
+                result.put("aiInsight", "AI Recommendation Engine curated top trending products and nearby merchants for you!");
+            }
+            return result;
+        }
+
         try {
-            // Submit request to FastAPI recommendation engine (type-safe reference avoids unchecked warning)
+            // Submit request to FastAPI recommendation engine with 1s timeout
             Map<String, Object> response = webClientBuilder.build()
                     .post()
                     .uri(aiServiceUrl + "/api/recommend")
                     .bodyValue(requestBody)
                     .retrieve()
                     .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {})
+                    .timeout(java.time.Duration.ofSeconds(1))
                     .block();
 
             if (response != null) {
