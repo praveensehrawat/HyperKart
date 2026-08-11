@@ -39,10 +39,16 @@ public class ProductController {
      * Queries active products database pages.
      */
     @GetMapping
-    public ResponseEntity<Page<Product>> findAll(
+    public ResponseEntity<java.util.Map<String, Object>> findAll(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        return ResponseEntity.ok(productService.findAll(PageRequest.of(page, size)));
+            @RequestParam(defaultValue = "12") int size) {
+        Page<Product> productPage = productService.findAll(PageRequest.of(page, size));
+        java.util.Map<String, Object> response = new java.util.HashMap<>();
+        response.put("content", productPage.getContent());
+        response.put("currentPage", productPage.getNumber());
+        response.put("totalItems", productPage.getTotalElements());
+        response.put("totalPages", productPage.getTotalPages());
+        return ResponseEntity.ok(response);
     }
 
     /**
